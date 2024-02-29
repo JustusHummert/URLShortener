@@ -15,11 +15,18 @@ import java.util.Optional;
 public class WebController {
     @Autowired
     UrlRepository urlRepository;
+
+    //redirects user to saved page
     @GetMapping("")
     public ResponseEntity<Void> redirect(String s){
         Optional<UrlEntity> optionalUrlEntity = urlRepository.findById(s);
         return optionalUrlEntity.<ResponseEntity<Void>>map(urlEntity -> ResponseEntity.status(HttpStatus.FOUND).
                 location(URI.create(urlEntity.getUrl())).build()).orElseGet(() ->
                 ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
+
+    @GetMapping("/URLShortener")
+    public String urlShortener(){
+        return "urlShortener";
     }
 }
