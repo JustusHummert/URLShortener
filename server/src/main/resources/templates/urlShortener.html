@@ -43,7 +43,6 @@
             $("#segment").css("border-color", "red");
             return;
         }
-
         $.ajax({
             url: "/URLShortener/addUrl",
             method: "post",
@@ -51,17 +50,19 @@
                 url: url,
                 segment: segment
             },
-            dataType: "text"
+            dataType: "text",
         })
             .done(function (data){
                 if(data=="segment is already taken.")
                     console.info("already taken");
                 if(data=="saved")
                     console.info("saved");
+                if(data=="invalid url")
+                    console.info("invalid URL");
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
                 console.error(jqXHR, textStatus, errorThrown);
-         });
+        });
     }
     )
 </script>
