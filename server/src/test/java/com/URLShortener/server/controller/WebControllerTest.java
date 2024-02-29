@@ -25,11 +25,11 @@ class WebControllerTest {
     void redirect() throws Exception{
         UrlEntity url = new UrlEntity("testUrl", "https://www.example.com/");
         urlRepository.save(url);
-        mvc.perform(MockMvcRequestBuilders.get("").param("s", "testUrl")
+        mvc.perform(MockMvcRequestBuilders.get("/testUrl")
                 .accept(MediaType.ALL))
                 .andExpect(status().isFound());
         urlRepository.delete(url);
-        mvc.perform(MockMvcRequestBuilders.get("").param("s", "testUrl")
+        mvc.perform(MockMvcRequestBuilders.get("/testUrl")
                         .accept(MediaType.ALL))
                 .andExpect(status().isNotFound());
     }

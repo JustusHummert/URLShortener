@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.net.URI;
 import java.util.Optional;
@@ -17,9 +18,9 @@ public class WebController {
     UrlRepository urlRepository;
 
     //redirects user to saved page
-    @GetMapping("")
-    public ResponseEntity<Void> redirect(String s){
-        Optional<UrlEntity> optionalUrlEntity = urlRepository.findById(s);
+    @GetMapping("{segment}")
+    public ResponseEntity<Void> redirect(@PathVariable String segment){
+        Optional<UrlEntity> optionalUrlEntity = urlRepository.findById(segment);
         return optionalUrlEntity.<ResponseEntity<Void>>map(urlEntity -> ResponseEntity.status(HttpStatus.FOUND).
                 location(URI.create(urlEntity.getUrl())).build()).orElseGet(() ->
                 ResponseEntity.status(HttpStatus.NOT_FOUND).build());
