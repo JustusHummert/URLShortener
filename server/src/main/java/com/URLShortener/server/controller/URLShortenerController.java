@@ -29,6 +29,8 @@ public class URLShortenerController {
         if(urlRepository.existsById(segment))
             return "segment is already taken.";
         //check if url is valid
+        if(!(url.startsWith("http://")||url.startsWith("https://")))
+            url = "https://" +url;
         String response =  WebClient.create(url).get().accept(MediaType.ALL).retrieve().bodyToMono(String.class)
                    .onErrorReturn("error").block();
         //Invalid Url

@@ -54,11 +54,11 @@
         })
             .done(function (data){
                 if(data=="segment is already taken.")
-                    console.info("already taken");
+                    alert("segment is already taken");
                 if(data=="saved")
-                    console.info("saved");
+                    alert("shortened URL is: " + window.location.origin +"/" + segment);
                 if(data=="invalid url")
-                    console.info("invalid URL");
+                    alert("invalid URL");
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
                 console.error(jqXHR, textStatus, errorThrown);
