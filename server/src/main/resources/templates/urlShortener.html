@@ -23,5 +23,47 @@
             <button type="button" id="shortenUrlBtn">shorten Url</button>
         </p>
 </form>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+    //disable form
+    $("urlForm").submit(function (e){
+        e.preventDefault();
+    }
+    )
+    //add button functionality
+    $("#shortenUrlBtn").click(function (e){
+        e.preventDefault();
+        let url = $("#url").val();
+        let segment = $("#segment").val();
+        if(url == ""){
+            $("#url").css("border-color", "red");
+            return;
+        }
+        if(segment == ""){
+            $("#segment").css("border-color", "red");
+            return;
+        }
+
+        $.ajax({
+            url: "/URLShortener/addUrl",
+            method: "post",
+            data: {
+                url: url,
+                segment: segment
+            },
+            dataType: "text"
+        })
+            .done(function (data){
+                if(data=="segment is already taken.")
+                    console.info("already taken");
+                if(data=="saved")
+                    console.info("saved");
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                console.error(jqXHR, textStatus, errorThrown);
+         });
+    }
+    )
+</script>
 </body>
 </html>
