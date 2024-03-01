@@ -29,6 +29,7 @@
     $("urlForm").submit(function (e){
         e.preventDefault();
     }
+
     )
     //add button functionality
     $("#shortenUrlBtn").click(function (e){
@@ -53,18 +54,44 @@
             dataType: "text",
         })
             .done(function (data){
-                if(data=="segment is already taken.")
+                if(data=="segment is already taken."){
                     alert("segment is already taken");
-                if(data=="saved")
+                    document.getElementById("segment").focus();
+                }
+                if(data=="saved"){
                     alert("shortened URL is: " + window.location.origin +"/" + segment);
-                if(data=="invalid url")
+                    document.getElementById("url").value="";
+                    document.getElementById("segment").value="";
+                    document.getElementById("url").focus();
+                }
+                if(data=="invalid url"){
                     alert("invalid URL");
+                    document.getElementById("url").focus();
+                }
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
                 console.error(jqXHR, textStatus, errorThrown);
         });
     }
     )
+
+//focus first input field
+document.getElementById("url").focus();
+
+//make button react to Enter
+document.getElementById("segment").addEventListener("keypress", function(event){
+  if(event.key === "Enter") {
+    event.preventDefault();
+    document.getElementById("shortenUrlBtn").click();
+  }
+});
+
+document.getElementById("url").addEventListener("keypress", function(event){
+    if(event.key == "Enter"){
+        event.preventDefault();
+        document.getElementById("segment").focus();
+    }
+});
 </script>
 </body>
 </html>
