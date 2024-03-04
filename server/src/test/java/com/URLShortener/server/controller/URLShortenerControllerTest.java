@@ -30,7 +30,7 @@ class URLShortenerControllerTest {
                         .param("segment", "example")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().string(equalTo("saved")));
+                .andExpect(content().string(equalTo("shortened Url is: http://localhost/example")));
         //segment taken
         mvc.perform(MockMvcRequestBuilders.post("/URLShortener/addUrl")
                         .param("url", "www.example.com")
