@@ -58,14 +58,14 @@
                     alert("segment is already taken");
                     document.getElementById("segment").focus();
                 }
-                if(data=="saved"){
-                    alert("shortened URL is: " + window.location.origin +"/" + segment);
-                    document.getElementById("url").value="";
-                    document.getElementById("segment").value="";
-                    document.getElementById("url").focus();
-                }
                 if(data=="invalid url"){
                     alert("invalid URL");
+                    document.getElementById("url").focus();
+                }
+                else{
+                    alert(data);
+                    document.getElementById("url").value="";
+                    document.getElementById("segment").value="";
                     document.getElementById("url").focus();
                 }
             })

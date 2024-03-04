@@ -2,6 +2,7 @@ package com.URLShortener.server.controller;
 
 import com.URLShortener.server.entities.UrlEntity;
 import com.URLShortener.server.repositories.UrlRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
@@ -24,7 +25,7 @@ public class URLShortenerController {
 
     //add new url, segment combination
     @PostMapping(path = "/addUrl")
-    public @ResponseBody String addUrl(String url, String segment){
+    public @ResponseBody String addUrl(String url, String segment, HttpServletRequest request){
         //check if segment already exists
         if(urlRepository.existsById(segment))
             return "segment is already taken.";
@@ -37,6 +38,6 @@ public class URLShortenerController {
         if(response == null || response.equals("error"))
             return "invalid url";
         urlRepository.save(new UrlEntity(segment, url));
-        return "saved";
+        return "shortened Url is: " + request.getRequestURL().toString().split("/URLShortener")[0] + "/" + segment;
     }
 }
