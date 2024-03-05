@@ -26,7 +26,7 @@ public class WebController {
                 ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
-    @GetMapping("/URLShortener")
+    @GetMapping("")
     public String urlShortener(){
         return "urlShortener";
     }
