@@ -38,6 +38,6 @@ public class URLShortenerController {
         if(response == null || response.equals("error"))
             return "invalid url";
         urlRepository.save(new UrlEntity(segment, url));
-        return "shortened Url is: " + request.getRequestURL().toString().split("/URLShortener")[0] + "/" + segment;
+        return "shortened Url is: https://" + request.getHeader("x-forwarded-host") + "/" + segment;
     }
 }

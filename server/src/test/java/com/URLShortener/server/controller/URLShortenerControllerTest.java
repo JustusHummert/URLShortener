@@ -25,12 +25,14 @@ class URLShortenerControllerTest {
     @Test
     void addUrl() throws Exception{
         //valid request
+        urlRepository.deleteById("example");
         mvc.perform(MockMvcRequestBuilders.post("/URLShortener/addUrl")
                         .param("url", "www.example.com")
                         .param("segment", "example")
+                        .header("x-forwarded-host", "localhost")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().string(equalTo("shortened Url is: http://localhost/example")));
+                .andExpect(content().string(equalTo("shortened Url is: https://localhost/example")));
         //segment taken
         mvc.perform(MockMvcRequestBuilders.post("/URLShortener/addUrl")
                         .param("url", "www.example.com")
