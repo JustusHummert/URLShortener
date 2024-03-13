@@ -1,10 +1,8 @@
-package com.URLShortener.server.controller;
-import static org.hamcrest.Matchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+package com.urlShortener.controller;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.URLShortener.server.entities.UrlEntity;
-import com.URLShortener.server.repositories.UrlRepository;
+import com.urlShortener.repositories.UrlRepository;
+import com.urlShortener.entities.UrlEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;

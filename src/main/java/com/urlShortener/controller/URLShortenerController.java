@@ -1,20 +1,15 @@
-package com.URLShortener.server.controller;
+package com.urlShortener.controller;
 
-import com.URLShortener.server.entities.UrlEntity;
-import com.URLShortener.server.repositories.UrlRepository;
+import com.urlShortener.entities.UrlEntity;
+import com.urlShortener.repositories.UrlRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
-
-import java.time.Duration;
 
 
 @Controller
@@ -38,6 +33,6 @@ public class URLShortenerController {
         if(response == null || response.equals("error"))
             return "invalid url";
         urlRepository.save(new UrlEntity(segment, url));
-        return "shortened Url is: " + request.getRequestURL().toString().split("/URLShortener")[0] + "/" + segment;
+        return "shortened Url is: https://" + request.getHeader("x-forwarded-host") + "/" + segment;
     }
 }

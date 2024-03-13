@@ -1,7 +1,7 @@
-package com.URLShortener.server.controller;
+package com.urlShortener.controller;
 
-import com.URLShortener.server.entities.UrlEntity;
-import com.URLShortener.server.repositories.UrlRepository;
+import com.urlShortener.entities.UrlEntity;
+import com.urlShortener.repositories.UrlRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
