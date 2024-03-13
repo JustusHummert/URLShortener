@@ -1,4 +1,4 @@
-package com.URLShortener.server.entities;
+package com.urlShortener.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
