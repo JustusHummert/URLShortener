@@ -6,92 +6,31 @@
 </head>
 <body>
 <h1>URLShortener</h1>
-<form id="urlForm">
+<div th:if="${param.shortUrl}"
+    th:text="|the shortened Url is: ${param.shortUrl}|"></td>
+</div>
+<div th:if="${param.alreadyTaken}">
+    The url is already taken
+</div>
+<div th:if="${param.invalidUrl}">
+    The url is invalid
+</div>
+<form action="/addUrl" method="post">
         <p>
             URL
         </p>
         <p>
-            <input type="text" id="url" aria-label="url" />
+            <input type="text" name="url">
         </p>
         <p>
             Segment of shortened URL
         </p>
         <p>
-            <input type="text" id="segment" aria-label="segment"/>
+            <input type="text" name="segment">
         </p>
         <p>
-            <button type="button" id="shortenUrlBtn">shorten Url</button>
+            <input type="submit" value="shorten Url">
         </p>
 </form>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script>
-    //disable form
-    $("urlForm").submit(function (e){
-        e.preventDefault();
-    }
-
-    )
-    //add button functionality
-    $("#shortenUrlBtn").click(function (e){
-        e.preventDefault();
-        let url = $("#url").val();
-        let segment = $("#segment").val();
-        if(url == ""){
-            $("#url").css("border-color", "red");
-            return;
-        }
-        if(segment == ""){
-            $("#segment").css("border-color", "red");
-            return;
-        }
-        $.ajax({
-            url: "/URLShortener/addUrl",
-            method: "post",
-            data: {
-                url: url,
-                segment: segment
-            },
-            dataType: "text",
-        })
-            .done(function (data){
-                if(data=="segment is already taken."){
-                    alert("segment is already taken");
-                    document.getElementById("segment").focus();
-                }
-                if(data=="invalid url"){
-                    alert("invalid URL");
-                    document.getElementById("url").focus();
-                }
-                else{
-                    alert(data);
-                    document.getElementById("url").value="";
-                    document.getElementById("segment").value="";
-                    document.getElementById("url").focus();
-                }
-            })
-            .fail(function (jqXHR, textStatus, errorThrown) {
-                console.error(jqXHR, textStatus, errorThrown);
-        });
-    }
-    )
-
-//focus first input field
-document.getElementById("url").focus();
-
-//make button react to Enter
-document.getElementById("segment").addEventListener("keypress", function(event){
-  if(event.key === "Enter") {
-    event.preventDefault();
-    document.getElementById("shortenUrlBtn").click();
-  }
-});
-
-document.getElementById("url").addEventListener("keypress", function(event){
-    if(event.key == "Enter"){
-        event.preventDefault();
-        document.getElementById("segment").focus();
-    }
-});
-</script>
 </body>
 </html>

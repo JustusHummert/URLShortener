@@ -1,7 +1,5 @@
 package com.urlShortener.controller;
 import static org.hamcrest.Matchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.urlShortener.repositories.UrlRepository;
 import org.junit.jupiter.api.Test;
@@ -13,6 +11,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 class URLShortenerControllerTest {
@@ -25,30 +25,29 @@ class URLShortenerControllerTest {
     void addUrl() throws Exception{
         //valid request
         urlRepository.deleteById("example");
-        mvc.perform(MockMvcRequestBuilders.post("/URLShortener/addUrl")
+        mvc.perform(MockMvcRequestBuilders.post("/addUrl")
                         .param("url", "www.example.com")
                         .param("segment", "example")
-                        .header("x-forwarded-host", "localhost")
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().string(equalTo("shortened Url is: https://localhost/example")));
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/?shortUrl=http://localhost/example"));
         //segment taken
-        mvc.perform(MockMvcRequestBuilders.post("/URLShortener/addUrl")
+        mvc.perform(MockMvcRequestBuilders.post("/addUrl")
                         .param("url", "www.example.com")
                         .param("segment", "example")
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().string(equalTo("segment is already taken.")));
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/?alreadyTaken"));
         //noinspection OptionalGetWithoutIsPresent
         assertEquals("https://www.example.com", urlRepository.findById("example").get().getUrl(),
                 "Url should be saved with https:// added");
         urlRepository.deleteById("example");
         //invalid url
-        mvc.perform(MockMvcRequestBuilders.post("/URLShortener/addUrl")
+        mvc.perform(MockMvcRequestBuilders.post("/addUrl")
                         .param("url", "test")
                         .param("segment", "example")
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().string(equalTo("invalid url")));
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/?invalidUrl"));
     }
 }

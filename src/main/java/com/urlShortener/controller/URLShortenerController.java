@@ -13,17 +13,17 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 
 @Controller
-@RequestMapping(path = "/URLShortener")
+@RequestMapping
 public class URLShortenerController {
     @Autowired
     private UrlRepository urlRepository;
 
     //add new url, segment combination
     @PostMapping(path = "/addUrl")
-    public @ResponseBody String addUrl(String url, String segment, HttpServletRequest request){
+    public String addUrl(String url, String segment, HttpServletRequest request){
         //check if segment already exists
         if(urlRepository.existsById(segment))
-            return "segment is already taken.";
+            return "redirect:/?alreadyTaken";
         //check if url is valid
         if(!(url.startsWith("http://")||url.startsWith("https://")))
             url = "https://" +url;
@@ -31,8 +31,10 @@ public class URLShortenerController {
                    .onErrorReturn("error").block();
         //Invalid Url
         if(response == null || response.equals("error"))
-            return "invalid url";
+            return "redirect:/?invalidUrl";
         urlRepository.save(new UrlEntity(segment, url));
-        return "shortened Url is: https://" + request.getHeader("x-forwarded-host") + "/" + segment;
+        String requestUrl = request.getRequestURL().toString();
+        requestUrl = requestUrl.substring(0, requestUrl.length() - request.getRequestURI().length());
+        return "redirect:/?shortUrl=" + requestUrl + "/" + segment;
     }
 }
