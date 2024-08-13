@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.net.URI;
 import java.util.Optional;
@@ -19,11 +20,11 @@ public class WebController {
 
     //redirects user to saved page
     @GetMapping("{segment}")
-    public ResponseEntity<Void> redirect(@PathVariable String segment){
+    public String redirect(@PathVariable String segment){
         Optional<UrlEntity> optionalUrlEntity = urlRepository.findById(segment);
-        return optionalUrlEntity.<ResponseEntity<Void>>map(urlEntity -> ResponseEntity.status(HttpStatus.FOUND).
-                location(URI.create(urlEntity.getUrl())).build()).orElseGet(() ->
-                ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+        if(optionalUrlEntity.isEmpty())
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Segment not found");
+        return "redirect:" + optionalUrlEntity.get().getUrl();
     }
 
     @GetMapping("")
